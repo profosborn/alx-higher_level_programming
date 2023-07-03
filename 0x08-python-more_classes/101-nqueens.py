@@ -34,8 +34,8 @@ def solve_nqueens(n):
         for i in range(row):
             if (
                 board[i] == col
-                or board[i] - col == i - row
                 or board[i] - col == row - i
+                or col - board[i] == row - i
             ):
                 return False
         return True
