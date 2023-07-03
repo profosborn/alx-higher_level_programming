@@ -17,17 +17,17 @@ Solutions are represented in the format [[r, c], [r, c], [r, c], [r, c]]
 where `r` and `c` represent the row and column, respectively, where a
 queen must be placed on the chessboard.
 """
-import sys
 
+import sys
 
 def solve_nqueens(n):
     if not n.isdigit():
-        print("N must be a number", file=sys.stderr)
+        print("N must be a number")
         sys.exit(1)
 
     n = int(n)
     if n < 4:
-        print("N must be at least 4", file=sys.stderr)
+        print("N must be at least 4")
         sys.exit(1)
 
     def is_safe(board, row, col):
@@ -55,13 +55,12 @@ def solve_nqueens(n):
 
     return solutions
 
-
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: ./nqueens.py N", file=sys.stderr)
+        print("Usage: nqueens N")
         sys.exit(1)
 
     solutions = solve_nqueens(sys.argv[1])
 
     for sol in solutions:
-        print([[i, sol[i]] for i in range(len(sol))])
+        print(sol)
