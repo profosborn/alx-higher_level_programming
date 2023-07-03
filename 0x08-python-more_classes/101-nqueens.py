@@ -19,19 +19,24 @@ queen must be placed on the chessboard.
 """
 import sys
 
+
 def solve_nqueens(n):
     if not n.isdigit():
-        print("N must be a number")
+        print("N must be a number", file=sys.stderr)
         sys.exit(1)
 
     n = int(n)
     if n < 4:
-        print("N must be at least 4")
+        print("N must be at least 4", file=sys.stderr)
         sys.exit(1)
 
     def is_safe(board, row, col):
         for i in range(row):
-            if board[i] == col or board[i] - col == i - row or board[i] - col == row - i:
+            if (
+                board[i] == col
+                or board[i] - col == i - row
+                or board[i] - col == row - i
+            ):
                 return False
         return True
 
@@ -50,12 +55,13 @@ def solve_nqueens(n):
 
     return solutions
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: nqueens N")
+        print("Usage: ./nqueens.py N", file=sys.stderr)
         sys.exit(1)
 
     solutions = solve_nqueens(sys.argv[1])
 
     for sol in solutions:
-        print([[i, sol[i]] for i in range(len(sol))])
+        print(sol)
