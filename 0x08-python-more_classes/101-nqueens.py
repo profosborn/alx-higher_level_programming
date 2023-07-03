@@ -34,8 +34,8 @@ def solve_nqueens(n):
         for i in range(row):
             if (
                 board[i] == col
-                or board[i] - col == i - row
                 or board[i] - col == row - i
+                or col - board[i] == row - i
             ):
                 return False
         return True
@@ -64,4 +64,4 @@ if __name__ == "__main__":
     solutions = solve_nqueens(sys.argv[1])
 
     for sol in solutions:
-        print(sol)
+        print([[i, sol[i]] for i in range(len(sol))])
