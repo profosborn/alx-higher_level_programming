@@ -20,7 +20,7 @@ def solve_nqueens(n):
         for i in range(row):
             if board[i] == col or \
                     board[i] - col == i - row or \
-                    col - board[i] == i - row:
+                    col - board[i] == row - i:
                 return False
         return True
 
