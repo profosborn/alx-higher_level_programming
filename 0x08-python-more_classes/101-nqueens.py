@@ -1,70 +1,63 @@
 #!/usr/bin/python3
-"""Solves the N-queens puzzle.
-Determines all possible solutions to placing N non-attacking queens on an NxN chessboard.
-"""
 
 import sys
 
-
 class NQueens:
-    """N-queens puzzle solver."""
-
-    def __init__(self, size):
-        """Initialize the NQueens object with the board size."""
-        self.size = size
+    def __init__(self, n):
+        self.n = n
+        self.board = [[' ' for _ in range(n)] for _ in range(n)]
         self.solutions = []
 
     def solve(self):
-        """Find all solutions to the N-queens puzzle."""
-        board = [[' '] * self.size for _ in range(self.size)]
-        self.place_queens(board, 0)
+        self.place_queen(0)
         self.print_solutions()
 
-    def place_queens(self, board, row):
-        """Recursively place queens on the chessboard."""
-        if row == self.size:
-            self.add_solution(board)
-            return
+    def place_queen(self, col):
+        if col == self.n:
+            self.solutions.append(self.get_solution())
+            return True
 
-        for col in range(self.size):
-            if self.is_safe(board, row, col):
-                board[row][col] = 'Q'
-                self.place_queens(board, row + 1)
-                board[row][col] = ' '
+        for row in range(self.n):
+            if self.is_safe(row, col):
+                self.board[row][col] = 'Q'
+                self.place_queen(col + 1)
+                self.board[row][col] = ' '
 
-    def is_safe(self, board, row, col):
-        """Check if placing a queen at the given position is safe."""
-        for i in range(row):
-            if board[i][col] == 'Q':
+    def is_safe(self, row, col):
+        for c in range(col):
+            if self.board[row][c] == 'Q':
                 return False
-            if col - (row - i) >= 0 and board[i][col - (row - i)] == 'Q':
+
+        for r, c in zip(range(row, -1, -1), range(col, -1, -1)):
+            if self.board[r][c] == 'Q':
                 return False
-            if col + (row - i) < self.size and board[i][col + (row - i)] == 'Q':
+
+        for r, c in zip(range(row, self.n), range(col, -1, -1)):
+            if self.board[r][c] == 'Q':
                 return False
+
         return True
 
-    def add_solution(self, board):
-        """Add a valid solution to the list of solutions."""
-        solution = [[r, c] for r in range(self.size) for c in range(self.size) if board[r][c] == 'Q']
-        self.solutions.append(solution)
+    def get_solution(self):
+        return [[r, c] for r in range(self.n) for c in range(self.n) if self.board[r][c] == 'Q']
 
     def print_solutions(self):
-        """Print all solutions to the standard output."""
         for solution in self.solutions:
             print(solution)
 
-
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('Usage: nqueens N')
-        sys.exit(1)
-    if not sys.argv[1].isdigit():
-        print('N must be a number')
-        sys.exit(1)
-    size = int(sys.argv[1])
-    if size < 4:
-        print('N must be at least 4')
+        print('Usage: nqueens N', file=sys.stderr)
         sys.exit(1)
 
-    nqueens = NQueens(size)
-    nqueens.solve()
+    try:
+        n = int(sys.argv[1])
+        if n < 4:
+            print('N must be at least 4', file=sys.stderr)
+            sys.exit(1)
+    except ValueError:
+        print('N must be a number', file=sys.stderr)
+        sys.exit(1)
+
+    queens = NQueens(n)
+    queens.solve()
