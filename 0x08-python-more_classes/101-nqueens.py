@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-
 import sys
-
 
 class NQueens:
     def __init__(self, n):
@@ -10,28 +8,27 @@ class NQueens:
 
     def solve(self):
         self.place_queen([], 0)
-        self.print_solutions()
 
-    def place_queen(self, solution, row):
+    def place_queen(self, board, row):
         if row == self.n:
-            self.solutions.append(solution)
-            return
+            self.solutions.append(board.copy())
+        else:
+            for col in range(self.n):
+                if self.is_safe(board, row, col):
+                    board.append([row, col])
+                    self.place_queen(board, row + 1)
+                    board.pop()
 
-        for col in range(self.n):
-            if self.is_safe(solution, row, col):
-                self.place_queen(solution + [(row, col)], row + 1)
-
-    def is_safe(self, solution, row, col):
-        for queen in solution:
-            q_row, q_col = queen
-            if q_col == col or q_row + q_col == row + col or q_row - q_col == row - col:
+    def is_safe(self, board, row, col):
+        for queen in board:
+            r, c = queen
+            if col == c or row + col == r + c or row - col == r - c:
                 return False
         return True
 
     def print_solutions(self):
         for solution in self.solutions:
-            print([[r, c] for r, c in solution])
-
+            print(solution)
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
@@ -49,3 +46,4 @@ if __name__ == '__main__':
 
     queens = NQueens(n)
     queens.solve()
+    queens.print_solutions()
