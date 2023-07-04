@@ -2,48 +2,36 @@
 
 import sys
 
+
 class NQueens:
     def __init__(self, n):
         self.n = n
-        self.board = [[' ' for _ in range(n)] for _ in range(n)]
         self.solutions = []
 
     def solve(self):
-        self.place_queen(0)
+        self.place_queen([], 0)
         self.print_solutions()
 
-    def place_queen(self, col):
-        if col == self.n:
-            self.solutions.append(self.get_solution())
-            return True
+    def place_queen(self, solution, row):
+        if row == self.n:
+            self.solutions.append(solution)
+            return
 
-        for row in range(self.n):
-            if self.is_safe(row, col):
-                self.board[row][col] = 'Q'
-                self.place_queen(col + 1)
-                self.board[row][col] = ' '
+        for col in range(self.n):
+            if self.is_safe(solution, row, col):
+                self.place_queen(solution + [(row, col)], row + 1)
 
-    def is_safe(self, row, col):
-        for c in range(col):
-            if self.board[row][c] == 'Q':
+    def is_safe(self, solution, row, col):
+        for queen in solution:
+            q_row, q_col = queen
+            if q_col == col or q_row + q_col == row + col or q_row - q_col == row - col:
                 return False
-
-        for r, c in zip(range(row, -1, -1), range(col, -1, -1)):
-            if self.board[r][c] == 'Q':
-                return False
-
-        for r, c in zip(range(row, self.n), range(col, -1, -1)):
-            if self.board[r][c] == 'Q':
-                return False
-
         return True
-
-    def get_solution(self):
-        return [[r, c] for r in range(self.n) for c in range(self.n) if self.board[r][c] == 'Q']
 
     def print_solutions(self):
         for solution in self.solutions:
-            print(solution)
+            print([[r, c] for r, c in solution])
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
