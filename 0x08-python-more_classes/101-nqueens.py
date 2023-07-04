@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys
 
+
 class NQueens:
     def __init__(self, n):
         self.n = n
@@ -29,6 +30,7 @@ class NQueens:
     def print_solutions(self):
         for solution in self.solutions:
             print(solution)
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
